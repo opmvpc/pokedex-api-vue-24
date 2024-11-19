@@ -1,0 +1,16 @@
+/* Import des polices Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Configuration des polices personnalisées */
+@layer base {
+  .font-pokemon {
+    font-family: 'Press Start 2P', cursive;
+  }
+  .font-display {
+    font-family: 'Outfit', sans-serif;
+  }
+}
