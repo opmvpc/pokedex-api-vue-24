@@ -15,14 +15,22 @@ class PokemonService {
           const details = await fetch(pokemon.url)
           const fullData = await details.json()
 
-          // On ne garde que les données essentielles
+          // On garde la même structure que getPokemonDetails
           return {
             id: fullData.id,
             name: fullData.name,
             types: fullData.types,
             sprites: {
-              front_default: fullData.sprites.front_default,
-              official_artwork: fullData.sprites.other['official-artwork']?.front_default
+              default: {
+                front: fullData.sprites.front_default,
+                back: fullData.sprites.back_default,
+                front_shiny: fullData.sprites.front_shiny,
+                back_shiny: fullData.sprites.back_shiny
+              },
+              official_artwork: {
+                default: fullData.sprites.other['official-artwork'].front_default,
+                shiny: fullData.sprites.other['official-artwork'].front_shiny
+              }
             }
           }
         })
@@ -72,7 +80,45 @@ class PokemonService {
     }
 
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-    const data = await response.json()
+    const fullData = await response.json()
+
+    // On récupère TOUTES les images, parce qu'on est des collectionneurs ! (｀∀´)Ψ
+    const sprites = {
+      default: {
+        front: fullData.sprites.front_default,
+        back: fullData.sprites.back_default,
+        front_shiny: fullData.sprites.front_shiny,
+        back_shiny: fullData.sprites.back_shiny,
+        front_female: fullData.sprites.front_female,
+        back_female: fullData.sprites.back_female,
+        front_shiny_female: fullData.sprites.front_shiny_female,
+        back_shiny_female: fullData.sprites.back_shiny_female,
+      },
+      official_artwork: {
+        default: fullData.sprites.other['official-artwork'].front_default,
+        shiny: fullData.sprites.other['official-artwork'].front_shiny
+      },
+      home: {
+        default: fullData.sprites.other.home.front_default,
+        shiny: fullData.sprites.other.home.front_shiny,
+        female: fullData.sprites.other.home.front_female,
+        shiny_female: fullData.sprites.other.home.front_shiny_female
+      },
+      dream_world: {
+        default: fullData.sprites.other.dream_world.front_default
+      }
+    }
+
+    const data = {
+      id: fullData.id,
+      name: fullData.name,
+      types: fullData.types,
+      stats: fullData.stats,
+      height: fullData.height / 10,
+      weight: fullData.weight / 10,
+      abilities: fullData.abilities,
+      sprites
+    }
 
     localStorage.setItem(cacheKey, JSON.stringify({
       timestamp: Date.now(),

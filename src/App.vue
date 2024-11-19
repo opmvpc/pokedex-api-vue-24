@@ -29,11 +29,13 @@ import { RouterLink, RouterView } from "vue-router";
             </div>
           </div>
 
-          <h1
-            class="text-xl md:text-3xl font-pokemon text-white ml-4 tracking-wider"
-          >
-            Pokédex
-          </h1>
+          <RouterLink to="/">
+            <h1
+              class="text-xl md:text-3xl font-pokemon text-white ml-4 tracking-wider"
+            >
+              Pokédex
+            </h1>
+          </RouterLink>
 
           <!-- Grille de ventilation responsive -->
           <div class="ml-auto mr-2 md:mr-4">

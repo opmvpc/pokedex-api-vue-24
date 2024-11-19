@@ -3,6 +3,8 @@ import { ref, onMounted, computed } from "vue";
 import Fuse from "fuse.js";
 import PokemonService from "@/PokemonService";
 import PokemonType from "@/components/PokemonType.vue";
+import LoadingPokeball from "@/components/LoadingPokeball.vue";
+import LazyImage from '@/components/LazyImage.vue'
 
 const pokemons = ref([]);
 const loading = ref(false);
@@ -56,24 +58,25 @@ onMounted(loadPokemons);
     </div>
 
     <!-- Affichage des Pokémon -->
-    <div v-if="loading" class="text-center text-gray-600">
-      Chargement des Pokémon...
+    <div v-if="loading">
+      <LoadingPokeball>Chargement du Pokédex...</LoadingPokeball>
     </div>
-    <div v-else-if="error" class="text-center text-red-600">
+    <div v-else-if="error" class="text-center py-12 text-red-500 font-pokemon">
       {{ error }}
     </div>
     <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <div
+      <router-link
+        :to="{ name: 'pokemon', params: { id: pokemon.id }}"
         v-for="pokemon in filteredPokemons"
         :key="pokemon.id"
-        class="bg-white rounded-lg p-4 border-2 border-gray-200 hover:border-red-500 hover:shadow-lg transition-all cursor-pointer"
+        class="bg-white rounded-lg p-4 border-2 border-gray-200 hover:border-red-500 hover:shadow-lg transition-all"
       >
         <div class="flex flex-col items-center space-y-2">
           <span class="font-pokemon text-xs text-gray-500">
             #{{ pokemon.id.toString().padStart(3, "0") }}
           </span>
-          <img
-            :src="pokemon.sprites.front_default"
+          <LazyImage
+            :src="pokemon.sprites.official_artwork.default"
             :alt="pokemon.name"
             class="w-full h-32 object-contain"
           />
@@ -88,7 +91,7 @@ onMounted(loadPokemons);
             />
           </div>
         </div>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
